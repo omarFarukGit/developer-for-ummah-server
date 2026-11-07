@@ -1,0 +1,13 @@
+model Lesson {
+  id        String   @id @default(cuid())
+  title     String
+  videoId   String
+  duration  String?
+  order     Int
+
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
