@@ -1,10 +1,13 @@
-model Course {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  thumbnail   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  lessons     Lesson[]
+model Course {
+  id                String   @id @default(cuid())
+  title             String
+  description       String?
+  thumbnail         String?
+  thumbnailPublicId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lessons Lesson[]
 }

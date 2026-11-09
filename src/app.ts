@@ -1,9 +1,15 @@
 import express from "express";
-const app = express();
-const port = 3000;
+import cors from "cors";
+import { courseRoutes } from "./app/modules/course/course.route";
+import { lessonRoutes } from "./app/modules/lesson/lesson.route";
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use("/api/v1/courses", courseRoutes);
+app.use("/api/v1/lessons", lessonRoutes);
 
 export default app;
