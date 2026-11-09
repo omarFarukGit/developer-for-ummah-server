@@ -7,7 +7,14 @@ import { upload } from "../../utils/multer";
 
 const router = Router();
 
-router.post("/", upload.single("thumbnail"), courseController.createCourse);
+router.post(
+  "/",
+  upload.fields([
+    { name: "thumbnail", maxCount: 1 },
+    { name: "icon", maxCount: 1 },
+  ]),
+  courseController.createCourse,
+);
 
 
 router.get("/", courseController.getAllCourses);

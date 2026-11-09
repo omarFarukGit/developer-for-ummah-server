@@ -611,6 +611,8 @@ export const CourseScalarFieldEnum = {
   description: 'description',
   thumbnail: 'thumbnail',
   thumbnailPublicId: 'thumbnailPublicId',
+  icon: 'icon',
+  iconPublicId: 'iconPublicId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

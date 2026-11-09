@@ -6,9 +6,15 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 
 const createCourse = catchAsync(async (req: Request, res: Response) => {
+  const files = req.files as {
+    thumbnail?: Express.Multer.File[];
+    icon?: Express.Multer.File[];
+  };
+
   const result = await courseService.createCourse(
     req.body,
-    req.file?.buffer as Buffer,
+    files?.thumbnail?.[0]?.buffer as Buffer,
+    files?.icon?.[0]?.buffer as Buffer,
   );
 
   sendResponse(res, {

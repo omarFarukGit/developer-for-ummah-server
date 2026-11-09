@@ -12,15 +12,16 @@ const createCourse = async (
     title: string;
     description?: string;
   },
-  buffer: Buffer,
+  thumbnailBuffer: Buffer,
+  iconBuffer: Buffer,
 ) => {
-  const cloudinaryResult = await new Promise<UploadApiResponse>(
+  const thumbnailResult = await new Promise<UploadApiResponse>(
     (resolve, reject) => {
       cloudinary.uploader
         .upload_stream(
           {
             resource_type: "image",
-            folder: "developer-for-ummah/courses",
+            folder: "developer-for-ummah/courses/thumbnails",
           },
           (error, result) => {
             if (error) {
@@ -28,22 +29,50 @@ const createCourse = async (
             }
 
             if (!result) {
-              return reject(new Error("No result returned from Cloudinary"));
+              return reject(
+                new Error("No thumbnail result returned from Cloudinary"),
+              );
             }
 
             resolve(result);
           },
         )
-        .end(buffer);
+        .end(thumbnailBuffer);
     },
   );
+
+  const iconResult = await new Promise<UploadApiResponse>((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream(
+        {
+          resource_type: "image",
+          folder: "developer-for-ummah/courses/icons",
+        },
+        (error, result) => {
+          if (error) {
+            return reject(error);
+          }
+
+          if (!result) {
+            return reject(new Error("No icon result returned from Cloudinary"));
+          }
+
+          resolve(result);
+        },
+      )
+      .end(iconBuffer);
+  });
 
   const course = await prisma.course.create({
     data: {
       title: payload.title,
       description: payload.description,
-      thumbnail: cloudinaryResult.secure_url,
-      thumbnailPublicId: cloudinaryResult.public_id,
+
+      thumbnail: thumbnailResult.secure_url,
+      thumbnailPublicId: thumbnailResult.public_id,
+
+      icon: iconResult.secure_url,
+      iconPublicId: iconResult.public_id,
     },
   });
 
